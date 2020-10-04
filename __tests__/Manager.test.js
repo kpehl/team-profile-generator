@@ -1,4 +1,3 @@
-const { exportAllDeclaration } = require('@babel/types');
 const { TestScheduler } = require('jest');
 const Manager = require('../lib/Manager');
 
@@ -11,5 +10,5 @@ test('creates a manager class', () => {
     expect(manager.role).toEqual('Manager')
     expect(manager.officeNumber).toEqual(expect.any(String))
 
-    console.log(manager)
+    // console.log(manager)
 });
