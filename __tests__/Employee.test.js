@@ -8,5 +8,7 @@ test('create an employee class', () => {
     expect(employee.id).toEqual(expect.any(String));
     expect(employee.email).toEqual(expect.any(String));
     expect(employee.role).toEqual('Employee')
+
+    // console.log(employee)
 });
 
