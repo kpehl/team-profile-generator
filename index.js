@@ -1,6 +1,8 @@
 // Dependencies
 const inquirer = require('inquirer');
 const Manager = require('./lib/Manager');
+const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
 const generatePage = require('./src/page-template');
 const { writeFile, copyFile} = require('./utils/generate-site');
 
@@ -63,24 +65,6 @@ const promptManager = () => {
                 }
             }
         }
-        // {
-        //     type: 'confirm',
-        //     name: 'confirmAbout',
-        //     message: 'Would you like to enter some information about yourself for an "About" section?',
-        //     default: true
-        // },
-        // {
-        //     type: 'input',
-        //     name: 'about',
-        //     message: 'Provide some information about yourself:',
-        //     when: ({ confirmAbout }) => {
-        //         if (confirmAbout) {
-        //             return true;
-        //         } else {
-        //             return false;
-        //         }
-        //     }
-        // }
     ]);
 };
 
@@ -106,8 +90,18 @@ const teamSelection = teamData => {
 
 const createTeamArray = teamData => {
     const manager = new Manager(teamData.managerName,teamData.managerId,teamData.managerEmail,teamData.managerOffice)
-    console.log(manager)
-    console.log(teamData)
+    // console.log(manager)
+    // console.log(teamData)
+    const engineers = teamData.engineers.map(function(engineer) { 
+        const teamMember = new Engineer(engineer.name,engineer.engineerId,engineer.engineerEmail,engineer.github)
+        return teamMember;
+    });
+    const interns = teamData.interns.map(function(intern) { 
+       const teamMember = new Intern(intern.name,intern.internId,intern.internEmail,intern.school)
+       return teamMember;
+    });
+    const teamArray = [manager, engineers, interns];
+    console.log(teamArray);
 }
 
 const promptEngineer = teamData => {
@@ -133,6 +127,45 @@ const promptEngineer = teamData => {
                 }
             }
         },
+        {
+            type: 'input',
+            name: 'engineerId',
+            message: "Enter the engineer's employee ID",
+            validate: idInput => {
+                if (idInput) {
+                    return true;
+                } else {
+                    console.log("Please enter the engineer's employee ID!");
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'engineerEmail',
+            message: "Enter the engineer's email address",
+            validate: emailInput => {
+                if (emailInput) {
+                    return true;
+                } else {
+                    console.log("Please enter the engineer's email address!");
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'github',
+            message: "Enter the engineer's GitHub user name",
+            validate: officeInput => {
+                if (officeInput) {
+                    return true;
+                } else {
+                    console.log("Please enter the engineer's GitHub user name!");
+                    return false;
+                }
+            }
+        }
     ])
     .then(memberData => {
         teamData.engineers.push(memberData);
@@ -159,6 +192,45 @@ const promptIntern = teamData => {
                     return true;
                 } else {
                     console.log("Please enter the intern's name!");
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'internId',
+            message: "Enter the intern's employee ID",
+            validate: idInput => {
+                if (idInput) {
+                    return true;
+                } else {
+                    console.log("Please enter the intern's employee ID!");
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'internEmail',
+            message: "Enter the intern's email address",
+            validate: emailInput => {
+                if (emailInput) {
+                    return true;
+                } else {
+                    console.log("Please enter the intern's email address!");
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'school',
+            message: "Enter the intern's school",
+            validate: schoolInput => {
+                if (schoolInput) {
+                    return true;
+                } else {
+                    console.log("Please enter the intern's school!");
                     return false;
                 }
             }
