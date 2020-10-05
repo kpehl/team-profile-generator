@@ -6,6 +6,7 @@ const Intern = require('./lib/Intern');
 const generatePage = require('./src/page-template');
 const { writeFile, copyFile} = require('./utils/generate-site');
 
+// Prompt the user for details about the team manager
 const promptManager = () => {
     console.log(`
     ============
@@ -68,7 +69,7 @@ const promptManager = () => {
     ]);
 };
 
-
+// Ask the user if they would like to add another team member, direct them to the correct prompts, and finalize the team when done
 const teamSelection = teamData => {
     return inquirer.prompt([
         {
@@ -88,22 +89,34 @@ const teamSelection = teamData => {
     })
 }
 
+// Create the employee objects using the constructors
 const createTeamArray = teamData => {
+    // create the manager object
     const manager = new Manager(teamData.managerName,teamData.managerId,teamData.managerEmail,teamData.managerOffice)
-    // console.log(manager)
-    // console.log(teamData)
-    const engineers = teamData.engineers.map(function(engineer) { 
-        const teamMember = new Engineer(engineer.name,engineer.engineerId,engineer.engineerEmail,engineer.github)
-        return teamMember;
-    });
-    const interns = teamData.interns.map(function(intern) { 
-       const teamMember = new Intern(intern.name,intern.internId,intern.internEmail,intern.school)
-       return teamMember;
-    });
-    const teamArray = [manager, engineers, interns];
+    // if there are engineers on the team, create an engineer object for each of them, otherwise create an empty array
+    let engineers = [];
+    if (teamData.engineers) {
+        engineers = teamData.engineers.map(function(engineer) { 
+            const teamMember = new Engineer(engineer.name,engineer.engineerId,engineer.engineerEmail,engineer.github)
+            return teamMember;
+        });
+    }
+    // if there are interns on the team, create an intern object for each of them, otherwise, create an empty array
+    let interns = [];
+    if (teamData.interns) {
+        interns = teamData.interns.map(function(intern) { 
+            const teamMember = new Intern(intern.name,intern.internId,intern.internEmail,intern.school)
+            return teamMember;
+         });
+    }
+
+    const teamArray = [];
+    teamArray.push(manager,...engineers,...interns);
     console.log(teamArray);
+    return teamArray;
 }
 
+// Prompt the user for details about an engineer
 const promptEngineer = teamData => {
     if (!teamData.engineers) {
         teamData.engineers = [];
@@ -167,12 +180,14 @@ const promptEngineer = teamData => {
             }
         }
     ])
+    // add the new team member to the engineers array
     .then(memberData => {
         teamData.engineers.push(memberData);
         teamSelection(teamData)
     })
 };
 
+// Prompt the user for details about an intern
 const promptIntern = teamData => {
     if (!teamData.interns) {
         teamData.interns = [];
@@ -236,18 +251,18 @@ const promptIntern = teamData => {
             }
         }
     ])
+    // add the new team member to the interns array
     .then(memberData => {
         teamData.interns.push(memberData);
         teamSelection(teamData)
     })
 };
 
-
+// Create a team: ask about the manager, prompt for other team members, generate the page template data, write the file, and copy the CSS
 promptManager()
   .then(teamSelection)
-//   .then(promptEngineer)
-//   .then(portfolioData => {
-//     return generatePage(portfolioData);
+//   .then(teamArray => {
+//     return generatePage(teamArray);
 //   })
 //   .then(pageHTML => {
 //     return writeFile(pageHTML);
@@ -261,6 +276,4 @@ promptManager()
 //   })
 //   .catch(err => {
 //     console.log(err);
-    // .then(teamData => console.log(teamData))
-    // .then( teamData => createTeamArray(teamData))
 //   });

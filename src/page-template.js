@@ -1,5 +1,5 @@
 module.exports = templateData => {
-    const{ team } = templateData;
+    const[ teammembers ] = templateData;
 
     return `
     <!DOCTYPE html>
@@ -17,12 +17,10 @@ module.exports = templateData => {
 
     <body>
     <header>
-      <div class="container flex-row justify-space-between align-center py-3">
         <h1 class="page-title text-secondary bg-dark py-2 px-3">My Team</h1>
-      </div>
     </header>
-    <main class="container my-5">
-          ${ generateCards(team) }
+    <main>
+          <p>${teammembers}</p>
     </main>
   </body>
   </html>
