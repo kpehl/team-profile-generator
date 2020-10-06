@@ -1,27 +1,4 @@
-const generateCards = teamArray => {
-  return `
-  <div>
-  ${teamArray
-    .filter(({ role }) => role === "Manager")
-    .map(({ name, id, email, role, office }) => {
-      return `
-        <h2>${name} /n ${role}</h2>
-        <ul>
-          <li>Employee ID: ${id}</li>
-          <li>Email: <a href = "mailto:${email}">${email}</li>
-          <li>Office Number: ${office}</li>
-        </ul>
-      </div>
-    `;
-    })
-    .join('')}
-  `
-}
 
-module.exports = templateData => {
-    const teamArray = templateData;
-
-    return `
     <!DOCTYPE html>
     <html lang="en">
 
@@ -40,9 +17,8 @@ module.exports = templateData => {
         <h1 class="page-title text-secondary bg-dark py-2 px-3">My Team</h1>
     </header>
     <main>
-          <p>${ generateCards(teamArray) }</p>
+          <p>undefined</p>
     </main>
   </body>
   </html>
-  `;
-};
+  
