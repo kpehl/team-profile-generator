@@ -12,3 +12,20 @@ test('create an employee class', () => {
     // console.log(employee)
 });
 
+test('get employee name', () => {
+    const employee = new Employee('Joe', '213', 'joe@somewhere.com');
+
+    expect(employee.getName()).toBe('Joe');
+})
+
+test('get employee id', () => {
+    const employee = new Employee('Joe', '213', 'joe@somewhere.com');
+
+    expect(employee.getId()).toBe('213');
+})
+
+test('get employee email', () => {
+    const employee = new Employee('Joe', '213', 'joe@somewhere.com');
+
+    expect(employee.getEmail()).toBe('joe@somewhere.com');
+})

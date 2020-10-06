@@ -12,3 +12,33 @@ test('creates an intern class', () => {
 
     // console.log(intern)
 });
+
+test("get intern's name", () => {
+    const intern = new Intern('Suzy', '998', 'suzy@someschool.edu', 'Some School U');
+
+    expect(intern.getName()).toBe('Suzy');
+})
+
+test("get intern's id", () => {
+    const intern = new Intern('Suzy', '998', 'suzy@someschool.edu', 'Some School U');
+
+    expect(intern.getId()).toBe('998');
+})
+
+test("get intern's email", () => {
+    const intern = new Intern('Suzy', '998', 'suzy@someschool.edu', 'Some School U');
+
+    expect(intern.getEmail()).toBe('suzy@someschool.edu');
+})
+
+test("get intern's role", () => {
+    const intern = new Intern('Suzy', '998', 'suzy@someschool.edu', 'Some School U');
+
+    expect(intern.getRole()).toBe('Intern');
+})
+
+test("get intern's school", () => {
+    const intern = new Intern('Suzy', '998', 'suzy@someschool.edu', 'Some School U');
+
+    expect(intern.getSchool()).toBe('Some School U');
+})

@@ -113,9 +113,20 @@ const createTeamArray = teamData => {
 
     const teamArray = [];
     teamArray.push(manager,...engineers,...interns);
-    // console.log(teamArray);
+    console.log(teamArray);
     // console.log(teamArray[0].name)
-    return teamArray;
+
+    generatePage(teamArray)
+      .then(pageHTML => {
+        return writeFile(pageHTML);
+      })
+      .then(writeFileResponse => {
+        console.log(writeFileResponse.message);
+        return copyFile();
+      })
+      .then(copyFileResponse => {
+        console.log(copyFileResponse.message);
+      })
 }
 
 // Prompt the user for details about an engineer
@@ -263,22 +274,6 @@ const promptIntern = teamData => {
 // Create a team: ask about the manager, prompt for other team members, generate the page template data, write the file, and copy the CSS
 promptManager()
   .then(teamSelection)
-  .then(teamArray => {
-      console.log(teamArray)
-  })
-  .then(teamArray => {
-    return generatePage(teamArray);
-  })
-  .then(pageHTML => {
-    return writeFile(pageHTML);
-  })
-  .then(writeFileResponse => {
-    console.log(writeFileResponse.message);
-    return copyFile();
-  })
-  .then(copyFileResponse => {
-    console.log(copyFileResponse.message);
-  })
   .catch(err => {
     console.log(err);
   });
