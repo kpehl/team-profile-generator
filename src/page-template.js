@@ -5,18 +5,20 @@ const generateManagerCard = teamArray => {
   ${manager
     .map(({ name, id, email, role, officeNumber }) => {
       return `
-      <div class = "card">
-        <header class = "card-header">
-          <p class = "card-header-title">
-            ${name} \n <span class = "icon"><i class="fas fa-mug-hot"></i></span>${role}
-          </p>
-        </header>
-        <div class = "card-content">
-          <ul>
-            <li>Employee ID: ${id}</li>
-            <li>Email: <a href = "mailto:${email}">${email}</a></li>
-            <li>Office Number: ${officeNumber}</li>
-          </ul>
+      <div class = "column is-3">
+        <div class = "card">
+          <header class = "card-header">
+            <p class = "card-content">
+              ${name} <br> <span class = "icon"><i class="fas fa-mug-hot"></i></span>${role}
+            </p>
+          </header>
+          <div class = "card-content">
+            <ul>
+              <li>Employee ID: ${id}</li>
+              <li>Email: <a href = "mailto:${email}">${email}</a></li>
+              <li>Office Number: ${officeNumber}</li>
+            </ul>
+          </div>
         </div>
       </div>
     `;
@@ -99,8 +101,10 @@ module.exports = templateData => {
     </header>
     <main>
       <div class = "container">
-        <div class = "columns">
-          <div class = "column is-3">${ generateManagerCard(teamArray) } ${ generateEngineerCards(teamArray) } ${ generateInternCards(teamArray) }</div>
+        <div class = "columns is-multiline">
+          ${ generateManagerCard(teamArray) } 
+          ${ generateEngineerCards(teamArray) } 
+          ${ generateInternCards(teamArray) }
         </div>
       </div>
     </main>
