@@ -3,13 +3,16 @@ const generateCards = teamArray => {
   <div>
   ${teamArray
     .filter(({ role }) => role === "Manager")
-    .map(({ name, id, email, role, office }) => {
+    .map(({ name, id, email, role, officeNumber }) => {
       return `
-        <h2>${name} /n ${role}</h2>
+        <h2>
+        ${name}
+        ${role}
+        </h2>
         <ul>
           <li>Employee ID: ${id}</li>
           <li>Email: <a href = "mailto:${email}">${email}</li>
-          <li>Office Number: ${office}</li>
+          <li>Office Number: ${officeNumber}</li>
         </ul>
       </div>
     `;
