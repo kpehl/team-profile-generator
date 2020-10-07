@@ -1,5 +1,5 @@
-const generateManagerCard = teamArray => {
-  const manager = teamArray.filter(({ role }) => role === "Manager");
+const generateManagerCard = templateData => {
+  const manager = templateData.filter(({ role }) => role === "Manager");
   // const manager = teamArray[0];
   if (manager == []) return ''
   return `
@@ -28,51 +28,60 @@ const generateManagerCard = teamArray => {
     `
   }
 
-const generateEngineerCards = teamArray => {
-  const engineers = teamArray.filter(({ role }) => role === "Engineer");
+const generateEngineerCards = templateData => {
+  const engineers = templateData.filter(({ role }) => role === "Engineer");
   // const engineers = teamArray[1];
   if (engineers ==[]) return ''
   return `
     ${engineers
       .map(({ name, id, email, role, github }) => {
         return `
-        <div>
-          <h2>
-          ${name}
-          <br>
-          <i class="fas fa-glasses"></i>${role}
-          </h2>
-          <ul>
-            <li>Employee ID: ${id}</li>
-            <li>Email: <a href = "mailto:${email}">${email}</a></li>
-            <li>GitHub Profile: <a href = "https://www.github.com/${github}/">${github}</a></li>
-          </ul>
+        <div class = "column is-3">
+        <div class = "card">
+          <header class = "card-header">
+            <p class = "card-content">
+              ${name} <br> <span class = "icon"><i class="fas fa-glasses"></i></span>${role}
+            </p>
+            </header>
+            <div class = "card-content">
+              <ul>
+                <li>Employee ID: ${id}</li>
+                <li>Email: <a href = "mailto:${email}">${email}</a></li>
+                <li>GitHub Profile: <a href = "https://www.github.com/${github}/">${github}</a></li>
+              </ul>
+            </div>
+          </div>
         </div>
       `;
       })
       .join('')}
       `
     }
-const generateInternCards = teamArray => {
-  const interns = teamArray.filter(({ role }) => role === "Intern");
+const generateInternCards = templateData => {
+  const interns = templateData.filter(({ role }) => role === "Intern");
   // const interns = teamArray[2];
   if (interns == []) return ''
   return `
-      ${teamArray
+      ${templateData
         .filter(({ role }) => role === "Intern")
         .map(({ name, id, email, role, school }) => {
           return `
-          <div>
-            <h2>
-            ${name}
-            <br>
-            <i class="fas fa-user-graduate"></i>${role}
-            </h2>
-            <ul>
-              <li>Employee ID: ${id}</li>
-              <li>Email: <a href = "mailto:${email}">${email}</a></li>
-              <li>School: ${school}</li>
-            </ul>
+
+          <div class = "column is-3">
+          <div class = "card">
+            <header class = "card-header">
+              <p class = "card-content">
+                ${name} <br> <span class = "icon"><i class="fas fa-user-graduate"></i></span>${role}
+              </p>
+              </header>
+              <div class = "card-content">
+                <ul>
+                  <li>Employee ID: ${id}</li>
+                  <li>Email: <a href = "mailto:${email}">${email}</a></li>
+                  <li>School: ${school}</li>
+                </ul>
+              </div>
+            </div>
           </div>
         `;
         })
@@ -81,7 +90,8 @@ const generateInternCards = teamArray => {
 }
 
 module.exports = templateData => {
-    const teamArray = templateData;
+    console.log('pagetemplate:')
+    console.log(templateData);
 
     return `
     <!DOCTYPE html>
@@ -105,9 +115,9 @@ module.exports = templateData => {
     <main>
       <div class = "container">
         <div class = "columns is-multiline">
-          ${ generateManagerCard(teamArray) } 
-          ${ generateEngineerCards(teamArray) } 
-          ${ generateInternCards(teamArray) }
+          ${ generateManagerCard(templateData) } 
+          ${ generateEngineerCards(templateData) } 
+          ${ generateInternCards(templateData) }
         </div>
       </div>
     </main>

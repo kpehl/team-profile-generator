@@ -164,11 +164,11 @@ const buildTeam = teamData => {
     .then( memberData => {
         teamData.members.push(memberData);
         if (memberData.newTeamMember) {
-            buildTeam(teamData)
+            return buildTeam(teamData);
         }
         else{ 
-            console.log(teamData)
-            return createTeamArray(teamData) 
+            // console.log(teamData)
+            return createTeamArray(teamData); 
         };
     });
 };
@@ -194,6 +194,7 @@ const createTeamArray = teamData => {
 
     const teamArray = [];
     teamArray.push(manager,...engineerObjs,...internObjs);
+    console.log('index.js:')
     console.log(teamArray);
     // console.log(teamArray[0].name)
     return teamArray
@@ -205,16 +206,16 @@ promptManager()
     .then((teamArray) => {
         return generatePage(teamArray)
     })
-    // .then(pageHTML => {
-    // return writeFile(pageHTML);
-    // })
-    // .then(writeFileResponse => {
-    // console.log(writeFileResponse.message);
-    // return copyFile();
-    // })
-    // .then(copyFileResponse => {
-    // console.log(copyFileResponse.message);
-    // })
+    .then(pageHTML => {
+    return writeFile(pageHTML);
+    })
+    .then(writeFileResponse => {
+    console.log(writeFileResponse.message);
+    return copyFile();
+    })
+    .then(copyFileResponse => {
+    console.log(copyFileResponse.message);
+    })
 
     .catch(err => {
     console.log(err);
