@@ -1,5 +1,6 @@
 const generateManagerCard = teamArray => {
   const manager = teamArray.filter(({ role }) => role === "Manager");
+  // const manager = teamArray[0];
   if (manager == []) return ''
   return `
   ${manager
@@ -29,6 +30,7 @@ const generateManagerCard = teamArray => {
 
 const generateEngineerCards = teamArray => {
   const engineers = teamArray.filter(({ role }) => role === "Engineer");
+  // const engineers = teamArray[1];
   if (engineers ==[]) return ''
   return `
     ${engineers
@@ -53,6 +55,7 @@ const generateEngineerCards = teamArray => {
     }
 const generateInternCards = teamArray => {
   const interns = teamArray.filter(({ role }) => role === "Intern");
+  // const interns = teamArray[2];
   if (interns == []) return ''
   return `
       ${teamArray
