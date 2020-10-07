@@ -6,13 +6,12 @@ const Intern = require('./lib/Intern');
 const generatePage = require('./src/page-template');
 const { writeFile, copyFile} = require('./utils/generate-site');
 
-// Prompt the user for details about the team members
+// Prompt the user for details about the team manager
 const promptManager = () => {
-    const teamData = [];
-    console.log (`
-    ===============
-    Add the Manager
-    ===============
+    console.log(`
+    ============
+    Team Manager
+    ============
     `);
     return inquirer.prompt([
         {
@@ -66,27 +65,80 @@ const promptManager = () => {
                     return false;
                 }
             }
-        },
-    ])
+        }
+    ]);
 };
 
-// Prompt the user for details about team members
-const buildTeam = teamData => {
-    if (!teamData.members) {
-        teamData.members = [];
-    }
-    console.log (`
-    =====================
-    Add a Team Member
-    =====================
-    `);
+// Ask the user if they would like to add another team member, direct them to the correct prompts, and finalize the team when done
+const teamSelection = teamData => {
     return inquirer.prompt([
         {
             type: 'list',
-            name: 'type',
+            name: 'newTeamMember',
             message: "Would you like to:",
-            choices: ['1. Add an Engineer', '2. Add an Intern']
-        },
+            choices: ['1. Add an Engineer', '2. Add an Intern', '3. Finish building my team']
+        }
+    ])
+    .then( answer => {
+        if (answer.newTeamMember.includes('1')) {return promptTeamMember(teamData, answer.newTeamMember)}
+        else if (answer.newTeamMember.includes('2')) {return promptTeamMember(teamData, answer.newTeamMember)}
+        else {
+            console.log('Finalizing Team')
+            return createTeamArray(teamData);
+        }
+    })
+}
+
+// Create the employee objects using the constructors
+const createTeamArray = teamData => {
+    // create the manager object
+    const manager = new Manager(teamData.managerName,teamData.managerId,teamData.managerEmail,teamData.managerOffice)
+    // if there are engineers on the team, create an engineer object for each of them, otherwise create an empty array
+    let engineers = [];
+    if (teamData.engineers) {
+        engineers = teamData.engineers.map(function(engineer) { 
+            const teamMember = new Engineer(engineer.name,engineer.id,engineer.email,engineer.github)
+            return teamMember;
+        });
+    }
+    // if there are interns on the team, create an intern object for each of them, otherwise, create an empty array
+    let interns = [];
+    if (teamData.interns) {
+        interns = teamData.interns.map(function(intern) { 
+            const teamMember = new Intern(intern.name,intern.id,intern.email,intern.school)
+            return teamMember;
+         });
+    }
+
+    const teamArray = [];
+    teamArray.push(manager,...engineers,...interns);
+    // console.log(teamArray);
+    // console.log(teamArray[0].name)
+    return teamArray
+}
+
+// Prompt the user for details about an engineer or an intern
+const promptTeamMember = (teamData, type) => {
+    if (!teamData.engineers) {
+        teamData.engineers = [];
+    }
+    if (!teamData.interns) {
+        teamData.interns = [];
+    }
+    if (type.includes('1')){
+        console.log (`
+        =====================
+        Add a New Engineer
+        =====================
+        `);
+    } else {
+        console.log (`
+        =====================
+        Add a New Intern
+        =====================
+        `);
+    }
+    return inquirer.prompt([
         {
             type: 'input',
             name: 'name',
@@ -130,7 +182,7 @@ const buildTeam = teamData => {
             type: 'input',
             name: 'github',
             message: "Enter the engineer's GitHub user name",
-            when: answers => answers.type === '1. Add an Engineer',
+            when: type.includes('1'),
             validate: githubInput => {
                 if (githubInput) {
                     return true;
@@ -144,7 +196,7 @@ const buildTeam = teamData => {
             type: 'input',
             name: 'school',
             message: "Enter the intern's school",
-            when: answers => answers.type === '2. Add an Intern',
+            when: type.includes('2'),
             validate: schoolInput => {
                 if (schoolInput) {
                     return true;
@@ -153,56 +205,25 @@ const buildTeam = teamData => {
                     return false;
                 }
             }
-        },
-        {
-            type: 'confirm',
-            name: 'newTeamMember',
-            message: "Would you like to add another team member?",
         }
     ])
-    // add the new team member to the array and add a new team member if desired
-    .then( memberData => {
-        teamData.members.push(memberData);
-        if (memberData.newTeamMember) {
-            return buildTeam(teamData);
+    // add the new team member to the appropriate array
+    .then(memberData => {
+        if (type.includes('1')) {
+            teamData.engineers.push(memberData);
+        } else {
+            teamData.interns.push(memberData);
         }
-        else{ 
-            // console.log(teamData)
-            return createTeamArray(teamData); 
-        };
-    });
+        return teamSelection(teamData)
+    })
 };
-
-// Create the employee objects using the constructors
-const createTeamArray = teamData => {
-    // Notify the user that the team is being finalize
-    console.log('Finalizing Team')
-    // create the manager object
-    const manager = new Manager(teamData.managerName,teamData.managerId,teamData.managerEmail,teamData.managerOffice)
-    // if there are engineers on the team, create an engineer object for each of them, otherwise create an empty array
-    let engineers = teamData.members.filter(member => {return member.type.includes('1')})
-        engineerObjs = engineers.map(function(engineer) { 
-            const teamMember = new Engineer(engineer.name,engineer.id,engineer.email,engineer.github)
-            return teamMember;
-        });
-    // if there are interns on the team, create an intern object for each of them, otherwise, create an empty array
-    let interns = teamData.members.filter(member => {return member.type.includes('2')})
-        internObjs = interns.map(function(intern) { 
-            const teamMember = new Intern(intern.name,intern.id,intern.email,intern.school)
-            return teamMember;
-         });
-
-    const teamArray = [];
-    teamArray.push(manager,...engineerObjs,...internObjs);
-    // console.log('index.js:')
-    // console.log(teamArray);
-    // console.log(teamArray[0].name)
-    return teamArray
-}
 
 // Create a team: ask about the manager, prompt for other team members, generate the page template data, write the file, and copy the CSS
 promptManager()
-    .then(buildTeam)
+    .then(teamSelection)
+    // .then(teamArray => {
+    //     console.log(teamArray)
+    // })
     .then((teamArray) => {
         return generatePage(teamArray)
     })
