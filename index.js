@@ -194,8 +194,8 @@ const createTeamArray = teamData => {
 
     const teamArray = [];
     teamArray.push(manager,...engineerObjs,...internObjs);
-    console.log('index.js:')
-    console.log(teamArray);
+    // console.log('index.js:')
+    // console.log(teamArray);
     // console.log(teamArray[0].name)
     return teamArray
 }

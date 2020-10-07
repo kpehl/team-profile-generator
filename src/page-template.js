@@ -10,7 +10,7 @@ const generateManagerCard = templateData => {
         <div class = "card">
           <header class = "card-header">
             <p class = "card-content">
-              ${name} <br> <span class = "icon"><i class="fas fa-mug-hot"></i></span>${role}
+              ${name} <br> <span class = "icon"><i class="fas fa-mug-hot"></i></span><span> ${role}</span>
             </p>
           </header>
           <div class = "card-content">
@@ -40,14 +40,14 @@ const generateEngineerCards = templateData => {
         <div class = "card">
           <header class = "card-header">
             <p class = "card-content">
-              ${name} <br> <span class = "icon"><i class="fas fa-glasses"></i></span>${role}
+              ${name} <br> <span class = "icon"><i class="fas fa-glasses"></i></span><span> ${role}</span>
             </p>
             </header>
             <div class = "card-content">
               <ul>
                 <li>Employee ID: ${id}</li>
                 <li>Email: <a href = "mailto:${email}">${email}</a></li>
-                <li>GitHub Profile: <a href = "https://www.github.com/${github}/">${github}</a></li>
+                <li>GitHub Profile: <a href = "https://www.github.com/${github}/" target = "_blank">${github}</a></li>
               </ul>
             </div>
           </div>
@@ -71,7 +71,7 @@ const generateInternCards = templateData => {
           <div class = "card">
             <header class = "card-header">
               <p class = "card-content">
-                ${name} <br> <span class = "icon"><i class="fas fa-user-graduate"></i></span>${role}
+                ${name} <br> <span class = "icon"><i class="fas fa-user-graduate"></i></span><span> ${role}</span>
               </p>
               </header>
               <div class = "card-content">
@@ -90,8 +90,8 @@ const generateInternCards = templateData => {
 }
 
 module.exports = templateData => {
-    console.log('pagetemplate:')
-    console.log(templateData);
+    // console.log('pagetemplate:')
+    // console.log(templateData);
 
     return `
     <!DOCTYPE html>
@@ -113,8 +113,8 @@ module.exports = templateData => {
         <h1 class="page-title text-secondary bg-dark py-2 px-3">My Team</h1>
     </header>
     <main>
-      <div class = "container">
-        <div class = "columns is-multiline">
+      <div class = "container is-centered">
+        <div class = "columns is-centered is-multiline">
           ${ generateManagerCard(templateData) } 
           ${ generateEngineerCards(templateData) } 
           ${ generateInternCards(templateData) }
