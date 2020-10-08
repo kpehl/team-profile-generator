@@ -1,97 +1,103 @@
-const generateManagerCard = templateData => {
-  const manager = templateData.filter(({ role }) => role === "Manager");
-  // const manager = teamArray[0];
-  if (manager == []) return ''
-  return `
-  ${manager
-    .map(({ name, id, email, role, officeNumber }) => {
-      return `
-      <div class = "column is-3">
-        <div class = "card">
-          <header class = "card-header">
-            <p class = "card-content">
-              ${name} <br> <span class = "icon"><i class="fas fa-mug-hot"></i></span><span> ${role}</span>
-            </p>
-          </header>
-          <div class = "card-content">
-            <ul>
-              <li>Employee ID: ${id}</li>
-              <li>Email: <a href = "mailto:${email}">${email}</a></li>
-              <li>Office Number: ${officeNumber}</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    `;
-    })
-    .join('')}
-    `
-  }
+// Generate the cards for the team
+const generateTeam = team => {
 
-const generateEngineerCards = templateData => {
-  const engineers = templateData.filter(({ role }) => role === "Engineer");
-  // const engineers = teamArray[1];
-  if (engineers ==[]) return ''
-  return `
-    ${engineers
-      .map(({ name, id, email, role, github }) => {
+    // Generate a manager card
+    const generateManager = manager => {
         return `
         <div class = "column is-3">
         <div class = "card">
           <header class = "card-header">
             <p class = "card-content">
-              ${name} <br> <span class = "icon"><i class="fas fa-glasses"></i></span><span> ${role}</span>
+                ${manager.getName()} <br> <span class = "icon"><i class="fas fa-mug-hot"></i></span><span> ${manager.getRole()}</span>
+            </p>
+          </header>
+          <div class = "card-content">
+            <ul>
+              <li>Employee ID: ${manager.getId()}</li>
+              <li>Email: <a href = "mailto:${manager.getEmail()}">${manager.getEmail()}</a></li>
+              <li>Office Number: ${manager.getOffice()}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+        `;
+    };
+
+    // Generate an engineer card
+    const generateEngineer = engineer => {
+        return `
+        <div class = "column is-3">
+        <div class = "card">
+          <header class = "card-header">
+            <p class = "card-content">
+              ${engineer.getName()} <br> <span class = "icon"><i class="fas fa-glasses"></i></span><span> ${engineer.getRole()}</span>
             </p>
             </header>
             <div class = "card-content">
               <ul>
-                <li>Employee ID: ${id}</li>
-                <li>Email: <a href = "mailto:${email}">${email}</a></li>
-                <li>GitHub Profile: <a href = "https://www.github.com/${github}/" target = "_blank">${github}</a></li>
+                <li>Employee ID: ${engineer.getId()}</li>
+                <li>Email: <a href = "mailto:${engineer.getEmail()}">${engineer.getEmail()}</a></li>
+                <li>GitHub Profile: <a href = "https://www.github.com/${engineer.getGitHub()}/" target = "_blank">${engineer.getGitHub()}</a></li>
               </ul>
             </div>
           </div>
         </div>
-      `;
-      })
-      .join('')}
-      `
-    }
-const generateInternCards = templateData => {
-  const interns = templateData.filter(({ role }) => role === "Intern");
-  // const interns = teamArray[2];
-  if (interns == []) return ''
-  return `
-      ${templateData
-        .filter(({ role }) => role === "Intern")
-        .map(({ name, id, email, role, school }) => {
-          return `
+        `;
+    };
 
-          <div class = "column is-3">
-          <div class = "card">
-            <header class = "card-header">
-              <p class = "card-content">
-                ${name} <br> <span class = "icon"><i class="fas fa-user-graduate"></i></span><span> ${role}</span>
-              </p>
-              </header>
-              <div class = "card-content">
-                <ul>
-                  <li>Employee ID: ${id}</li>
-                  <li>Email: <a href = "mailto:${email}">${email}</a></li>
-                  <li>School: ${school}</li>
-                </ul>
-              </div>
+    // Generate an intern card
+    const generateIntern = intern => {
+        return `
+        <div class = "column is-3">
+        <div class = "card">
+          <header class = "card-header">
+            <p class = "card-content">
+              ${intern.getName()} <br> <span class = "icon"><i class="fas fa-user-graduate"></i></span><span> ${intern.getRole()}</span>
+            </p>
+            </header>
+            <div class = "card-content">
+              <ul>
+                <li>Employee ID: ${intern.getId()}</li>
+                <li>Email: <a href = "mailto:${intern.getEmail()}">${intern.getEmail()}</a></li>
+                <li>School: ${intern.getSchool()}</li>
+              </ul>
             </div>
           </div>
+        </div>
         `;
-        })
-        .join('')}
-        `
+    };
+
+    // Set up an empty array for the cards
+    const cards = [];
+
+    // Add the manager card, filtering out the manager object from the team array provided by index.js, 
+    // and using map to perform the function of generating the card above
+    cards.push(team
+        .filter(employee => employee.getRole() === "Manager")
+        .map(manager => generateManager(manager))
+    );
+    // Add cards for the engineers, filtering out engineer objects from the team array, 
+    // map to perform the card generation for each engineer object, and join to add each one to the array
+    cards.push(team
+        .filter(employee => employee.getRole() === "Engineer")
+        .map(engineer => generateEngineer(engineer))
+        .join("")
+    );
+    // Add cards for the interns, filtering out engineer objects from the team array, 
+    // map to perform the card generation for each engineer object, and join to add each one to the array
+    cards.push(team
+        .filter(employee => employee.getRole() === "Intern")
+        .map(intern => generateIntern(intern))
+        .join("")
+    );
+
+    // Join all the cards and return the cards as a block of html that can be inserted into the webpage
+    return cards.join("");
+
 }
 
-module.exports = templateData => {
-    // console.log('pagetemplate:')
-    // console.log(templateData);
+// Generate the webpage, inserting the cards, and export the html so it can be used by the write file function
+module.exports = team => {
 
     return `
     <!DOCTYPE html>
@@ -115,9 +121,7 @@ module.exports = templateData => {
     <main>
       <div class = "container is-centered">
         <div class = "columns is-centered is-multiline">
-          ${ generateManagerCard(templateData) } 
-          ${ generateEngineerCards(templateData) } 
-          ${ generateInternCards(templateData) }
+          ${ generateTeam(team) } 
         </div>
       </div>
     </main>
